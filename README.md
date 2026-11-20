@@ -1,23 +1,22 @@
 # ogo-usage
 
-To install dependencies:
+An OpenCode plugin that displays OpenCode Go usage in the TUI, including 5-hour, weekly, and monthly usage percentages.
+
+## Installation
+
+Install the plugin from Git:
 
 ```bash
-bun install
+opencode plugin add git:jmaccs/ogo-usage
 ```
 
-To run:
+## API key
+
+Set `OPENCODE_API_KEY` in the environment from which you start OpenCode:
 
 ```bash
-bun run index.ts
+export OPENCODE_API_KEY="your-api-key"
+opencode
 ```
 
-To type check:
-
-```bash
-bun check
-```
-
-Run `bun fmt` to format the code.
-
-This project was created using `bun init` in bun v1.4.4. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+The plugin also checks `~/.config/opencode/go-usage.key` (with permissions set to `600`) and the key stored by `/connect` in `~/.local/share/opencode/auth.json`. `XDG_CONFIG_HOME` and `XDG_DATA_HOME` can override these locations.
