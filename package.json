@@ -2,7 +2,7 @@
   "name": "ogo-usage",
   "type": "module",
   "exports": {
-    "./tui": "./src/tui.tsx"
+    "./tui": "./src/tui.ts"
   },
   "dependencies": {
     "@opencode/plugin": "latest"
