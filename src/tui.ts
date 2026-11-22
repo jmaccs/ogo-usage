@@ -90,8 +90,6 @@ export default Plugin.define({
 
     const clock = setInterval(() => setNow(Date.now()), TICK_MS);
 
-    const SLOT = "home.footer.status"; // or "prompt.footer.status" (pick ONE)
-
     // Fallbacks guarantee a visible colour even if a theme token is missing.
     const FALLBACK = { ok: "#9ece6a", warn: "#e0af68", crit: "#f7768e" };
 
@@ -156,10 +154,25 @@ export default Plugin.define({
       return row;
     };
 
-    // ONE slot only, append only, so omo-slim's arrangement is untouched
-    context.ui.slot({ append: SLOT, render: () => Bar() });
+    const [claimed, setClaimed] = createSignal<string[]>([])
+    const TARGETS = [
+      { slot: "home.footer.status" as const },
+      { slot: "prompt.footer.status" as const },
+    ]
+    const winner = () => TARGETS.find((t) => claimed().includes(t.slot))?.slot
+
+    const disposers = TARGETS.map((target) =>
+      context.ui.slot({
+        append: target.slot,
+        render: () => {
+          setClaimed([target.slot])
+          return winner() === target.slot ? Bar() : undefined
+        },
+      }),
+    )
 
     return () => {
+      disposers.forEach((dispose) => dispose())
       stopped = true;
       if (pollTimer) clearTimeout(pollTimer);
       clearInterval(clock);
