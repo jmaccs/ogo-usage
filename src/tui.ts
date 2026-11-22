@@ -154,25 +154,25 @@ export default Plugin.define({
       return row;
     };
 
-    const [claimed, setClaimed] = createSignal<string[]>([])
+    const [claimed, setClaimed] = createSignal<string[]>([]);
     const TARGETS = [
       { slot: "home.footer.status" as const },
-      { slot: "prompt.footer.status" as const },
-    ]
-    const winner = () => TARGETS.find((t) => claimed().includes(t.slot))?.slot
+      { slot: "prompt.footer" as const },
+    ];
+    const winner = () => TARGETS.find((t) => claimed().includes(t.slot))?.slot;
 
     const disposers = TARGETS.map((target) =>
       context.ui.slot({
         append: target.slot,
         render: () => {
-          setClaimed([target.slot])
-          return winner() === target.slot ? Bar() : undefined
+          setClaimed([target.slot]);
+          return winner() === target.slot ? Bar() : undefined;
         },
       }),
-    )
+    );
 
     return () => {
-      disposers.forEach((dispose) => dispose())
+      disposers.forEach((dispose) => dispose());
       stopped = true;
       if (pollTimer) clearTimeout(pollTimer);
       clearInterval(clock);
